@@ -4,7 +4,7 @@ author: Steven Senior
 date: October 2019
 autosize: true
 font-family: 'Helvetica'
-width: 2400
+width: 1800
 height: 1350
 
 What is R?
@@ -22,8 +22,10 @@ Reasons to bother:
 - It's free!
 - Coded analyses are more transparent and reproducible.
 - It's widely used in industry, academia, and increasingly in public health.
+- Processing 100 observations is as easy as processing 100,000.
 - There's a package for everything.
 - You can make some [cool things](https://shiny.rstudio.com/gallery/).
+- Learning R involves learning to code, which is a useful skill.
 - You like doing things the hard way.
 
 Reasons not to bother:
@@ -38,14 +40,50 @@ Lessons from personal experience
 - Learn to read the documentation
 - Learn to find help: 
    - Stack Overflow
-   - Google
+   - Google (Googling the error message is totally legit)
 - There are loads of free online resources. I made a [list] (https://medium.com/@steven.senior/free-r-resources-500182a54e90).
 
 Installing R & R Studio
 ========================================================
+**R**
+- R is the basic programming environment. You need to install this first.
+- R can be downloaded [here](https://cran.r-project.org/mirrors.html). Find the nearest mirror to you (for the UK, use Bristol or Imperial).
+- Download the file for your operating system.
+
+**R Studio**
+- R Studio is an interactive development environment (IDE). It basically makes writing R code a lot easier. 
+- You need R installed already for R Studio to work.
+- You can download it [here](https://www.rstudio.com/products/rstudio/download/).
+
+**R Studio Cloud**
+- [R Studio Cloud](https://rstudio.cloud/) is a cloud-based version of R Studio that runs in a web browser.
+- You don't need to install anything to use it. Just sign up for an account.
+- It saves worrying about installing things. It also has links to a load of helpful learning resources.
 
 Guided Tour of R Studio
 ========================================================
+
+I'll go through this in the session, but if you couldn't join us, here's a [link](https://www.r-bloggers.com/a-tour-of-rstudio/) to a tour of RStudio.
+
+Scripts & Writing Code
+========================================================
+You can do a lot just in the terminal. It's a good place to do quick exploratory things.
+
+But one of the advantages of using a programming language is that you have a record of everything you have done to the data. Other people can re-use and check this. 
+
+A **script** is just a list of commands. They're usually written in a text file with the file extension '.R`.
+
+You can run individual lines from a script, chunks of it, or the whole thing. Commands in a script are executed sequentially from top to bottom.
+
+Lines that start with a `#` symbol will be ignored. Use these for writing comments to explain what your code is doing. This is a very good thing to do: it helps you come back to your code, and it helps other people try to figure out what on earth you've done.
+
+R ignores white space. You can use this to make your code readable. Use as much as you like. The aim should be to make something that is easy for someone else to read. Everyone has their own style but things I tend to try to do:
+
+- Put arguments in a function call on different lines.
+- Make sure things are indented well and consistently.
+- Object names that make sense.
+- Stick to lower case!
+- Avoid spaces and special characters in object and variable names.
 
 Types of things in R
 ========================================================
@@ -73,7 +111,7 @@ Objects can be accessed by typing their name and pressing return in the console.
 *Example*
 
 ```r
-# Create an object called 'name' with value 'Steve'
+# Create an object called 'name' with value 'Senior'
 name <- "Senior"
 
 # Access the object
@@ -121,7 +159,7 @@ Sys.Date()
 ```
 
 ```
-[1] "2019-09-20"
+[1] "2019-09-22"
 ```
 
 You can get help on a function by typing `?function_name` (note no brackets!). This will include a list of all the arguments (including any defaults), an explanation of what it produces, and (ideally) some examples of how to use it.
@@ -150,15 +188,11 @@ Vectors
 ========================================================
 R stores data in objects called **vectors**. A vector is just a collection of data **of the same type**.
 
-A vector's length is the number of items in it. You can get a vector's length using the `length()` function
+A vector's length is the number of items in it. You can get a vector's length using the `length()` function. You can access individual items from a vector using square brackets: `vector_name[item_number]`
 
 Single data items are stored as vectors too - they're vectors with a length of 1.
 
-Vectors are created using the `c()` function, or with dedicated functions for the type of data:
-- `character()`
-- `numeric()`
-- `logical()`
-- `factor()`
+Vectors are created using the `c()` function, or with dedicated functions for the type of data: `character()`, `numeric()`, `logical()`, and `factor()`
 
 You can find out the type of vector using the `class()` function
 
@@ -182,6 +216,15 @@ class(ages)
 
 ```
 [1] "numeric"
+```
+
+```r
+# Get the third item
+ages[3]
+```
+
+```
+[1] 5
 ```
 
 Lists
@@ -243,18 +286,19 @@ can_drive <- c(TRUE, TRUE, FALSE, FALSE)
 fav_drink <- c("beer", "g&t", "juice", "milk")
 
 # Make a data frame
-family <- data.frame(name, age, sex, can_drive, fav_drink)
+family <- data.frame(name, age, sex, can_drive, fav_drink,
+                     stringsAsfactors = FALSE)
 
 # View the data frame
 family
 ```
 
 ```
-    name age    sex can_drive fav_drink
-1 Steven  38   male      TRUE      beer
-2  Vicki  39 female      TRUE       g&t
-3  Oscar   5   male     FALSE     juice
-4 Imogen   2 female     FALSE      milk
+    name age    sex can_drive fav_drink stringsAsfactors
+1 Steven  38   male      TRUE      beer            FALSE
+2  Vicki  39 female      TRUE       g&t            FALSE
+3  Oscar   5   male     FALSE     juice            FALSE
+4 Imogen   2 female     FALSE      milk            FALSE
 ```
 
 Data Frames
@@ -270,9 +314,9 @@ head(family, n = 2)
 ```
 
 ```
-    name age    sex can_drive fav_drink
-1 Steven  38   male      TRUE      beer
-2  Vicki  39 female      TRUE       g&t
+    name age    sex can_drive fav_drink stringsAsfactors
+1 Steven  38   male      TRUE      beer            FALSE
+2  Vicki  39 female      TRUE       g&t            FALSE
 ```
 
 ```r
@@ -281,8 +325,8 @@ tail(family, n = 1)
 ```
 
 ```
-    name age    sex can_drive fav_drink
-4 Imogen   2 female     FALSE      milk
+    name age    sex can_drive fav_drink stringsAsfactors
+4 Imogen   2 female     FALSE      milk            FALSE
 ```
  - In RStudio you can get a sort of spreadsheet like view using the `View()` function (note the capital 'V'!)
  
@@ -347,6 +391,13 @@ summary(family)
  Vicki :1   Mean   :21.00                              milk :1  
             3rd Qu.:38.25                                       
             Max.   :39.00                                       
+ stringsAsfactors
+ Mode :logical   
+ FALSE:4         
+                 
+                 
+                 
+                 
 ```
 
 The `str()` function is also a useful way to preview the data:
@@ -357,12 +408,13 @@ str(family)
 ```
 
 ```
-'data.frame':	4 obs. of  5 variables:
- $ name     : Factor w/ 4 levels "Imogen","Oscar",..: 3 4 2 1
- $ age      : num  38 39 5 2
- $ sex      : Factor w/ 2 levels "female","male": 2 1 2 1
- $ can_drive: logi  TRUE TRUE FALSE FALSE
- $ fav_drink: Factor w/ 4 levels "beer","g&t","juice",..: 1 2 3 4
+'data.frame':	4 obs. of  6 variables:
+ $ name            : Factor w/ 4 levels "Imogen","Oscar",..: 3 4 2 1
+ $ age             : num  38 39 5 2
+ $ sex             : Factor w/ 2 levels "female","male": 2 1 2 1
+ $ can_drive       : logi  TRUE TRUE FALSE FALSE
+ $ fav_drink       : Factor w/ 4 levels "beer","g&t","juice",..: 1 2 3 4
+ $ stringsAsfactors: logi  FALSE FALSE FALSE FALSE
 ```
 
 Data Frames
@@ -378,8 +430,8 @@ family[1,]
 ```
 
 ```
-    name age  sex can_drive fav_drink
-1 Steven  38 male      TRUE      beer
+    name age  sex can_drive fav_drink stringsAsfactors
+1 Steven  38 male      TRUE      beer            FALSE
 ```
 
 ```r
@@ -400,7 +452,7 @@ family[3, 2]
 ```
 [1] 5
 ```
-- Or you can get individual variables using the `$` operator: `data_frame_neme$variable_name`:
+- Or you can get individual variables using the `$` operator: `data_frame_name$variable_name`:
 
 
 ```r
@@ -423,7 +475,8 @@ names(family)
 ```
 
 ```
-[1] "name"      "age"       "sex"       "can_drive" "fav_drink"
+[1] "name"             "age"              "sex"             
+[4] "can_drive"        "fav_drink"        "stringsAsfactors"
 ```
 
 You can find out the numbers of rows and columns using `nrow()` and `ncol()`:
@@ -444,7 +497,7 @@ ncol(family)
 ```
 
 ```
-[1] 5
+[1] 6
 ```
 
 Tidy Data - A Digression
@@ -510,43 +563,53 @@ paste(family$name, "Senior", sep = " ")
 ```
 
 ```r
-# Find if age is two
-family$age == 2
+# Find out how old we'll all be in 10 years
+family$age + 10
 ```
 
 ```
-[1] FALSE FALSE FALSE  TRUE
+[1] 48 49 15 12
 ```
 
-Scripts & Writing Code
+Basic Operations: Logical Operations
 ========================================================
-You can do a lot just in the terminal. It's a good place to do quick exploratory things.
 
-But one of the advantages of using a programming language is that you have a record of everything you have done to the data. Other people can re-use and check this. 
+You will probably find at some point that you want to compare two things in R. You can do this with **logical operators**. These are:
+- `==` : equal to e.g. `x == y` asks 'is x equal to y'.
+- `!=` : not equal to.
+- `>`, `<`, `>=`, `<=` : greater than, less than, greater or equal to, less or equal to.
+- `!` : not
+Logical values are stored as `0` for false and `1` for true, so they can be added up.
+They can also be used as an index for vectors or data frames.
 
-A **script** is just a list of commands. They're usually written in a text file with the file extension '.R`.
-
-You can run individual lines from a script, chunks of it, or the whole thing. Commands in a script are executed sequentially from top to bottom.
-
-Lines that start with a `#` symbol will be ignored. Use these for writing comments to explain what your code is doing. This is a very good thing to do: it helps you come back to your code, and it helps other people try to figure out what on earth you've done.
-
-R ignores white space. You can use this to make your code readable. Use as much as you like. The aim should be to make something that is easy for someone else to read. Everyone has their own style but things I tend to try to do:
-
-- Put arguments in a function call on different lines.
-- Make sure things are indented well and consistently.
-- Object names that make sense.
-- Stick to lower case!
-- Avoid spaces and special characters in object and variable names.
+*Examples*
 
 ```r
-# Combine names with a surname - contrast with earlier code
-paste(family$name, 
-      "Senior", 
-      sep = " ")
+# Find family members who are 21 or over
+family$age >= 21
 ```
 
 ```
-[1] "Steven Senior" "Vicki Senior"  "Oscar Senior"  "Imogen Senior"
+[1]  TRUE  TRUE FALSE FALSE
+```
+
+```r
+# Get names of family members who are 21 or over
+family$name[family$age >= 21]
+```
+
+```
+[1] Steven Vicki 
+Levels: Imogen Oscar Steven Vicki
+```
+
+```r
+# How many family members can drive?
+sum(family$can_drive)
+```
+
+```
+[1] 2
 ```
 
 Loading Data - CSV Files
@@ -647,7 +710,6 @@ Manipulating Data: Base R
 ========================================================
 
 You will probably want to select, delete, and transform data. There are lots of ways to do this. 
-
 - You can rename your variables simply by assigning a new value to the names attribute of the data frame using `names()`:
 
 ```r
@@ -671,11 +733,11 @@ family
 ```
 
 ```
-    name age    sex driver middle_name
-1 Steven  38   male   TRUE         Lee
-2  Vicki  39 female   TRUE      Louise
-3  Oscar   5   male  FALSE       Brian
-4 Imogen   2 female  FALSE    Emmeline
+    name age    sex driver stringsAsfactors middle_name
+1 Steven  38   male   TRUE            FALSE         Lee
+2  Vicki  39 female   TRUE            FALSE      Louise
+3  Oscar   5   male  FALSE            FALSE       Brian
+4 Imogen   2 female  FALSE            FALSE    Emmeline
 ```
 
 Manipulating Data: Tidyverse
@@ -716,6 +778,42 @@ asthma %>%
   <int>       <dbl>       <dbl>    <dbl> <drtn>       
 1     1        140.        25.1     11.2 4.750000 days
 2     2        144.        31.3     11.8 7.166667 days
+```
+
+Manipulating Data: Re-coding Variables
+========================================================
+Recoding variables is easy in R. 
+
+
+```r
+# Convert height from cm into m using base R
+asthma$Height <- asthma$Height / 100
+
+# Calculate a BMI variable using the tidyverse mutate() function
+asthma <- mutate(asthma, 
+                 bmi = Weight / Height^2)
+
+# Calculate an 'overweight' variable using logical operators
+asthma <- mutate(asthma,
+                 overweight = bmi >= 25)
+
+# View what we have created!
+head(asthma, n = 5)
+```
+
+```
+  ID Age Sex Height Weight       Dadm      Ddisc     los       bmi
+1  1   7   1   1.09   13.1 1995-12-09 1995-12-15  6 days 11.026008
+2  2   8   2   1.24   14.1 1996-11-04 1996-11-15 11 days  9.170135
+3  3   8   2   1.25   16.2 1995-11-11 1995-11-20  9 days 10.368000
+4  4   9   1   1.30   17.5 1996-07-17 1996-07-18  1 days 10.355030
+5  5  11   2   1.39   30.7 1996-03-21 1996-03-30  9 days 15.889447
+  overweight
+1      FALSE
+2      FALSE
+3      FALSE
+4      FALSE
+5      FALSE
 ```
 
 Basic Stats
@@ -792,9 +890,87 @@ sample estimates:
 
 More Stats: Regression Models
 ========================================================
-- `lm()`
-- `glm()`
-- `lmer()` and `glmer()`
+As you'd expect, fitting regression models in R is pretty easy. Whether you're fitting a simple linear model or some complicated generalised multilevel model, the functions use a similar set of arguments, which are also common with some plotting functions. The main functions I've used are:
+
+- `lm()` for linear models;
+- `glm()` for generalised linear models (logistic regression, poisson regression etc.)
+- `lmer()` and `glmer()` for multilevel models and generalised multilevel models (from the `lme4` package)
+- `plm()` and `pglm()` for panel linear and generalised linear regression models (from the `plm` and `pglm` packages)
+
+Regardless of the function the basic code is similar. Let's do a simple linear regression model:
+
+
+```r
+# Fit a simple linear regression for weight vs height
+m1 <- lm(formula = Height ~ Weight,         # specifies Height as the independent variable
+         data = asthma)                     # sets 'asthma' as the dataset
+
+# Get a summary of the model
+summary(m1)
+```
+
+```
+
+Call:
+lm(formula = Height ~ Weight, data = asthma)
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.139532 -0.044041  0.006777  0.071156  0.107251 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  1.03595    0.06931  14.947 3.96e-07 ***
+Weight       0.01335    0.00219   6.095 0.000291 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.09017 on 8 degrees of freedom
+Multiple R-squared:  0.8228,	Adjusted R-squared:  0.8007 
+F-statistic: 37.15 on 1 and 8 DF,  p-value: 0.000291
+```
+
+More Stats: Regression Models
+========================================================
+For a slightly more complicated example, let's see if we can predict sex from height and weight using a logistic regression.
+
+
+```r
+# Recode Sex as 0 or 1 from 1 and 2
+asthma <- mutate(asthma, Sex = Sex - 1)
+
+# Fit a simple linear regression for weight vs height
+m2 <- glm(formula = Sex ~ Height + Weight,         # specifies Sex as the independent variable
+          data = asthma,                            # sets 'asthma' as the dataset
+          family = binomial)                        # family = binomial for logistic regression               
+
+# Get a summary of the model
+summary(m2)
+```
+
+```
+
+Call:
+glm(formula = Sex ~ Height + Weight, family = binomial, data = asthma)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-1.5539  -1.0304   0.5208   1.0283   1.3332  
+
+Coefficients:
+            Estimate Std. Error z value Pr(>|z|)
+(Intercept)   8.6320    10.4950   0.822    0.411
+Height       -9.2383    10.4279  -0.886    0.376
+Weight        0.1748     0.1732   1.009    0.313
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 13.460  on 9  degrees of freedom
+Residual deviance: 11.959  on 7  degrees of freedom
+AIC: 17.959
+
+Number of Fisher Scoring iterations: 4
+```
 
 Basic Plotting: Base R
 ========================================================
@@ -811,7 +987,7 @@ The basic functions are `plot()` and `hist()` and `boxplot()`.
 hist(as.numeric(asthma$los))
 ```
 
-<img src="intro_to_R.Rmd-figure/unnamed-chunk-29-1.png" title="plot of chunk unnamed-chunk-29" alt="plot of chunk unnamed-chunk-29"  />
+<img src="intro_to_R.Rmd-figure/unnamed-chunk-32-1.png" title="plot of chunk unnamed-chunk-32" alt="plot of chunk unnamed-chunk-32" width="40%" height="30%" style="display: block; margin: auto;" />
 
 Basic Plotting: Base R
 ========================================================
@@ -823,7 +999,7 @@ boxplot(Weight ~ Sex,
         data = asthma)
 ```
 
-<img src="intro_to_R.Rmd-figure/unnamed-chunk-30-1.png" title="plot of chunk unnamed-chunk-30" alt="plot of chunk unnamed-chunk-30"  />
+<img src="intro_to_R.Rmd-figure/unnamed-chunk-33-1.png" title="plot of chunk unnamed-chunk-33" alt="plot of chunk unnamed-chunk-33" width="40%" style="display: block; margin: auto;" />
 
 Basic Plotting: Base R
 ========================================================
@@ -842,7 +1018,7 @@ m1 <- lm(formula = Height ~ Weight,
 abline(m1, col = "red")
 ```
 
-<img src="intro_to_R.Rmd-figure/unnamed-chunk-31-1.png" title="plot of chunk unnamed-chunk-31" alt="plot of chunk unnamed-chunk-31"  />
+<img src="intro_to_R.Rmd-figure/unnamed-chunk-34-1.png" title="plot of chunk unnamed-chunk-34" alt="plot of chunk unnamed-chunk-34" width="40%" style="display: block; margin: auto;" />
 
 Plotting: ggplot2
 ========================================================
@@ -860,6 +1036,7 @@ g1 <- ggplot(aes(x = Height,
                  size = as.numeric(los)),
              data = asthma) +
       geom_point() +
+      geom_smooth(method = "lm") +
       scale_fill_viridis_d() +
       theme_bw() +
       theme(plot.title = element_text(face = "bold")) +
@@ -872,5 +1049,143 @@ g1 <- ggplot(aes(x = Height,
 g1
 ```
 
-![plot of chunk unnamed-chunk-32](intro_to_R.Rmd-figure/unnamed-chunk-32-1.png)
+Plotting: ggplot2
+========================================================
 
+<img src="intro_to_R.Rmd-figure/unnamed-chunk-36-1.png" title="plot of chunk unnamed-chunk-36" alt="plot of chunk unnamed-chunk-36" width="50%" style="display: block; margin: auto;" />
+
+Plotting: cowplot
+========================================================
+
+As a quick extra, I thought I'd mention `cowplot` which is a nice package by Claus O. Wilke. I particularly like it for producing figures for publication where I need to combine several figures. Claus's book is [here](https://serialmentor.com/dataviz/).
+
+
+```r
+# Load cowplot
+library(cowplot)
+
+# Change the theme on plot g1
+g1 <- g1 + theme_cowplot()
+
+# Make a second plot
+g2 <- ggplot(aes(x = Age, y = los, colour = Sex),
+             data = asthma) +
+      geom_point() +
+      geom_smooth(method = "lm") +
+      theme_cowplot() + 
+      labs(title = "Scatterplot of asthma data",
+           subtitle = "Plot subtitle",
+           caption = "Plot caption",
+           x = "Age (years)",
+           y = "Length of stay (days)")
+
+g_main <- plot_grid(g1, g2, ncol = 2)
+
+# Make a title and caption
+g_title <- ggplot() + 
+           labs(title = "Some random plots",
+                subtitle = "Random subtitle") + 
+           theme_cowplot()
+
+g_caption <- ggplot() +
+             labs(caption = "A really interesting caption") +
+             theme(plot.caption = element_text(hjust = 0)) +
+             theme_cowplot()
+
+# Plot all the things!
+plot_grid(g_title, g_main, g_caption,
+          ncol = 1,
+          rel_heights = c(0.15, 1, 0.1))
+```
+
+Plotting: cowplot
+========================================================
+
+<img src="intro_to_R.Rmd-figure/unnamed-chunk-38-1.png" title="plot of chunk unnamed-chunk-38" alt="plot of chunk unnamed-chunk-38" width="50%" style="display: block; margin: auto;" />
+
+Programming - Loops
+========================================================
+
+When you need to do the same thing over a number of items, a for-loop can be the way to go.
+
+- An example might be reading in several similar files within a file structure.
+
+For loops take a set of code and repeat it for each value of a set of things you want to iterate over.
+
+For loops are written like this: `for(i in values){code_to_repeat}`
+
+
+```r
+# Loop over family, printing a summary for each person.
+for(i in 1:nrow(family)){
+   p <- paste(family$name[i],
+              family$middle_name[i],
+              "Senior is a",
+              family$age[i],
+              "year old",
+              family$sex[i],
+              sep = " ")
+   print(p)
+}
+```
+
+```
+[1] "Steven Lee Senior is a 38 year old male"
+[1] "Vicki Louise Senior is a 39 year old female"
+[1] "Oscar Brian Senior is a 5 year old male"
+[1] "Imogen Emmeline Senior is a 2 year old female"
+```
+There are also while loops. These execute code while a given statement is true. Be careful with these: they can run indefinitely. I never use them.
+
+Programming - if and else
+========================================================
+Sometimes when you're processing data you want to vary your code depending on whether something is true or not. 
+
+if statements look like this: `if(condition){code_to_execute_if_true}`
+
+if statements can also be followed by an `else` statement and some code to execute if the if statement is false.
+
+
+```r
+# Use a for loop and an if-else statement to download a file if it isn't already downloaded
+for(i in 1:nrow(family)){
+   if(family$age[i] >= 18){
+     family$adult[i] <- "adult"
+   }else{
+      family$adult[i] <- "child"
+   }
+}
+
+# See what we made!
+family
+```
+
+```
+    name age    sex driver stringsAsfactors middle_name adult
+1 Steven  38   male   TRUE            FALSE         Lee adult
+2  Vicki  39 female   TRUE            FALSE      Louise adult
+3  Oscar   5   male  FALSE            FALSE       Brian child
+4 Imogen   2 female  FALSE            FALSE    Emmeline child
+```
+
+Extras - Git & GitHub
+========================================================
+
+**Git** 
+- Git is a version control system that is used a lot by people who work with code.
+- Version control is important even when you're working on your own. It's very easy to break a long script!
+- Get lets you work on a different version (or branch) of your code and files and only merge it back to the master version once you're happy that it works.
+- An introduction is [here](https://git-scm.com/book/en/v1/Getting-Started-Git-Basics).
+
+**GitHub**
+- GitHub is a website that you can use to host your Git repositories. 
+- It lets you use Git through a graphical interface, which saves learning git's language separately.
+- It also serves as a bit of a social network and showcase for work.
+- RStudio integrates well with GitHub. You can:
+   - Start R projects directly from GitHub repositories;
+   - Push changes directly to GitHub from RStudio; and
+   - Copy (or 'fork') other people's repositories if you want to re-use their code; and
+   - Send them pull requests if you think you've improved or fixed their code.
+
+The End
+========================================================
