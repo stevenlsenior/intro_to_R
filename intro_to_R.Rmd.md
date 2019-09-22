@@ -9,10 +9,15 @@ height: 1350
 
 What is R?
 ========================================================
-
+R is...
 - A programming language (sort of)
 - A statistical computing environment
 - A way of life (some would say a cult)
+- A free replacement for SPSS / Stata / SAS
+
+R was created with the idea that people can start by using the built in functions and gradually progress to writing their own functions and programming.
+
+That said, the learning curve can still feel a bit steep.
 
 
 Why bother learning R?
@@ -36,11 +41,11 @@ Reasons not to bother:
 Lessons from personal experience
 ========================================================
 
-- Have a project (preferably lots)
-- Learn to read the documentation
+- Have a project (preferably lots).
+- Learn to read the documentation.
 - Learn to find help: 
-   - Stack Overflow
-   - Google (Googling the error message is totally legit)
+   - Stack Overflow etc.
+   - Google (Googling the error message is totally legit programming skills)
 - There are loads of free online resources. I made a [list] (https://medium.com/@steven.senior/free-r-resources-500182a54e90).
 
 Installing R & R Studio
@@ -67,15 +72,15 @@ I'll go through this in the session, but if you couldn't join us, here's a [link
 
 Scripts & Writing Code
 ========================================================
-You can do a lot just in the terminal. It's a good place to do quick exploratory things.
+You can do a lot just in the terminal. It's a good place to do quick exploratory stuff.
 
 But one of the advantages of using a programming language is that you have a record of everything you have done to the data. Other people can re-use and check this. 
 
 A **script** is just a list of commands. They're usually written in a text file with the file extension '.R`.
 
-You can run individual lines from a script, chunks of it, or the whole thing. Commands in a script are executed sequentially from top to bottom.
+You can run individual lines from a script, chunks of it, or the whole thing. Select the code you want to run and press Ctrl + Enter. Commands are executed sequentially from top to bottom. 
 
-Lines that start with a `#` symbol will be ignored. Use these for writing comments to explain what your code is doing. This is a very good thing to do: it helps you come back to your code, and it helps other people try to figure out what on earth you've done.
+Everything on a line after a `#` symbol will be ignored. Use these for writing comments to explain what your code is doing. This is a very good thing to do: it helps you come back to your code, and it helps other people try to figure out what on earth you've done.
 
 R ignores white space. You can use this to make your code readable. Use as much as you like. The aim should be to make something that is easy for someone else to read. Everyone has their own style but things I tend to try to do:
 
@@ -127,13 +132,9 @@ Functions
 
 Functions are a type of object that produce outputs and may need inputs (called 'arguments').
 
-Functions are followed by a pair of brackets that enclose the arguments, which are separated by a comma.
+Functions are followed by a pair of brackets that enclose the arguments, which are separated by a comma. They look like this: `function_name(argument_1, argument_2, ...)`
 
-They look like this: `function_name(argument_1, argument_2, ...)`
-
-You call a function by typing its name and giving it the required inputs between the brackets. You can name the arguments (which I prefer to do for clarity) or just enter them in the order that the function expects
-
-You can create a function like this:
+You call a function by typing its name and giving it the required inputs between the brackets. You can name the arguments (which I prefer to do for clarity) or just enter them in the order that the function expects. You can create a function like this:
 
 
 ```r
@@ -154,7 +155,7 @@ Some functions don't need any arguments (e.g. if all arguments have default sett
 
 
 ```r
-# Sys.Date() tells us what day R thinks it is. It doesn't need inputs()
+# Sys.Date() tells us what day R thinks it is. It doesn't need inputs
 Sys.Date()
 ```
 
@@ -287,18 +288,18 @@ fav_drink <- c("beer", "g&t", "juice", "milk")
 
 # Make a data frame
 family <- data.frame(name, age, sex, can_drive, fav_drink,
-                     stringsAsfactors = FALSE)
+                     stringsAsFactors = FALSE)
 
 # View the data frame
 family
 ```
 
 ```
-    name age    sex can_drive fav_drink stringsAsfactors
-1 Steven  38   male      TRUE      beer            FALSE
-2  Vicki  39 female      TRUE       g&t            FALSE
-3  Oscar   5   male     FALSE     juice            FALSE
-4 Imogen   2 female     FALSE      milk            FALSE
+    name age    sex can_drive fav_drink
+1 Steven  38   male      TRUE      beer
+2  Vicki  39 female      TRUE       g&t
+3  Oscar   5   male     FALSE     juice
+4 Imogen   2 female     FALSE      milk
 ```
 
 Data Frames
@@ -314,9 +315,9 @@ head(family, n = 2)
 ```
 
 ```
-    name age    sex can_drive fav_drink stringsAsfactors
-1 Steven  38   male      TRUE      beer            FALSE
-2  Vicki  39 female      TRUE       g&t            FALSE
+    name age    sex can_drive fav_drink
+1 Steven  38   male      TRUE      beer
+2  Vicki  39 female      TRUE       g&t
 ```
 
 ```r
@@ -325,8 +326,8 @@ tail(family, n = 1)
 ```
 
 ```
-    name age    sex can_drive fav_drink stringsAsfactors
-4 Imogen   2 female     FALSE      milk            FALSE
+    name age    sex can_drive fav_drink
+4 Imogen   2 female     FALSE      milk
 ```
  - In RStudio you can get a sort of spreadsheet like view using the `View()` function (note the capital 'V'!)
  
@@ -350,8 +351,8 @@ summary(family$name)
 ```
 
 ```
-Imogen  Oscar Steven  Vicki 
-     1      1      1      1 
+   Length     Class      Mode 
+        4 character character 
 ```
 
 ```r
@@ -384,20 +385,20 @@ summary(family)
 ```
 
 ```
-     name        age            sex    can_drive       fav_drink
- Imogen:1   Min.   : 2.00   female:2   Mode :logical   beer :1  
- Oscar :1   1st Qu.: 4.25   male  :2   FALSE:2         g&t  :1  
- Steven:1   Median :21.50              TRUE :2         juice:1  
- Vicki :1   Mean   :21.00                              milk :1  
-            3rd Qu.:38.25                                       
-            Max.   :39.00                                       
- stringsAsfactors
- Mode :logical   
- FALSE:4         
-                 
-                 
-                 
-                 
+     name                age            sex            can_drive      
+ Length:4           Min.   : 2.00   Length:4           Mode :logical  
+ Class :character   1st Qu.: 4.25   Class :character   FALSE:2        
+ Mode  :character   Median :21.50   Mode  :character   TRUE :2        
+                    Mean   :21.00                                     
+                    3rd Qu.:38.25                                     
+                    Max.   :39.00                                     
+  fav_drink        
+ Length:4          
+ Class :character  
+ Mode  :character  
+                   
+                   
+                   
 ```
 
 The `str()` function is also a useful way to preview the data:
@@ -408,13 +409,12 @@ str(family)
 ```
 
 ```
-'data.frame':	4 obs. of  6 variables:
- $ name            : Factor w/ 4 levels "Imogen","Oscar",..: 3 4 2 1
- $ age             : num  38 39 5 2
- $ sex             : Factor w/ 2 levels "female","male": 2 1 2 1
- $ can_drive       : logi  TRUE TRUE FALSE FALSE
- $ fav_drink       : Factor w/ 4 levels "beer","g&t","juice",..: 1 2 3 4
- $ stringsAsfactors: logi  FALSE FALSE FALSE FALSE
+'data.frame':	4 obs. of  5 variables:
+ $ name     : chr  "Steven" "Vicki" "Oscar" "Imogen"
+ $ age      : num  38 39 5 2
+ $ sex      : chr  "male" "female" "male" "female"
+ $ can_drive: logi  TRUE TRUE FALSE FALSE
+ $ fav_drink: chr  "beer" "g&t" "juice" "milk"
 ```
 
 Data Frames
@@ -430,8 +430,8 @@ family[1,]
 ```
 
 ```
-    name age  sex can_drive fav_drink stringsAsfactors
-1 Steven  38 male      TRUE      beer            FALSE
+    name age  sex can_drive fav_drink
+1 Steven  38 male      TRUE      beer
 ```
 
 ```r
@@ -440,8 +440,7 @@ family[,3]
 ```
 
 ```
-[1] male   female male   female
-Levels: female male
+[1] "male"   "female" "male"   "female"
 ```
 
 ```r
@@ -475,8 +474,7 @@ names(family)
 ```
 
 ```
-[1] "name"             "age"              "sex"             
-[4] "can_drive"        "fav_drink"        "stringsAsfactors"
+[1] "name"      "age"       "sex"       "can_drive" "fav_drink"
 ```
 
 You can find out the numbers of rows and columns using `nrow()` and `ncol()`:
@@ -497,7 +495,7 @@ ncol(family)
 ```
 
 ```
-[1] 6
+[1] 5
 ```
 
 Tidy Data - A Digression
@@ -579,6 +577,7 @@ You will probably find at some point that you want to compare two things in R. Y
 - `!=` : not equal to.
 - `>`, `<`, `>=`, `<=` : greater than, less than, greater or equal to, less or equal to.
 - `!` : not
+
 Logical values are stored as `0` for false and `1` for true, so they can be added up.
 They can also be used as an index for vectors or data frames.
 
@@ -599,8 +598,7 @@ family$name[family$age >= 21]
 ```
 
 ```
-[1] Steven Vicki 
-Levels: Imogen Oscar Steven Vicki
+[1] "Steven" "Vicki" 
 ```
 
 ```r
@@ -733,20 +731,18 @@ family
 ```
 
 ```
-    name age    sex driver stringsAsfactors middle_name
-1 Steven  38   male   TRUE            FALSE         Lee
-2  Vicki  39 female   TRUE            FALSE      Louise
-3  Oscar   5   male  FALSE            FALSE       Brian
-4 Imogen   2 female  FALSE            FALSE    Emmeline
+    name age    sex driver middle_name
+1 Steven  38   male   TRUE         Lee
+2  Vicki  39 female   TRUE      Louise
+3  Oscar   5   male  FALSE       Brian
+4 Imogen   2 female  FALSE    Emmeline
 ```
 
 Manipulating Data: Tidyverse
 ========================================================
 Base R is fine, particularly for quick manipulations. But it can quickly get dense and confusing when you need to do repeated manipations on the same data frame.
 
-The `tidyverse` is an enormous package of packages that contains functions built around the principles of tidy data.
-
-The functions in `tidyverse` are named and designed to make code easier to read.
+The `tidyverse` is an enormous package of packages that contains functions built around the principles of tidy data. The functions in `tidyverse` are named and designed to make code easier to read.
 One package within `tidyverse` is called `dplyr`. This package makes manipulating and summarising data in R *much* easier.
 
 In particular, it introduces the `%>%` (pipe operator). This lets you pass the outputs from one function straight to another. This means you can omit the first argument (which is normally the data frame that you want to operate on).
@@ -758,10 +754,10 @@ library(tidyverse)
 
 # manipulate the asthma data and store over the old object
 asthma <- asthma %>%
-          select(-X) %>%                                         # Drop that pesky extra variable
-          mutate(Dadm = as.Date(Dadm, format = "%d/%m/%y"),      # Convert variables to date variables
+          select(-X) %>% # Drop that pesky extra variable
+          mutate(Dadm = as.Date(Dadm, format = "%d/%m/%y"), # Convert variables to dates
                  Ddisc = as.Date(Ddisc, format = "%d/%m/%y"),
-                 los = Ddisc - Dadm)                             # Calculate a length of stay variable
+                 los = Ddisc - Dadm) # Calculate a length of stay 
 
 # Summarise by sex
 asthma %>% 
@@ -793,9 +789,9 @@ asthma$Height <- asthma$Height / 100
 asthma <- mutate(asthma, 
                  bmi = Weight / Height^2)
 
-# Calculate an 'overweight' variable using logical operators
-asthma <- mutate(asthma,
-                 overweight = bmi >= 25)
+# Calculate an 'overweight' variable using logical operators using mutate() and %>%
+asthma <- asthma %>% 
+          mutate(overweight = bmi >= 25)
 
 # View what we have created!
 head(asthma, n = 5)
@@ -897,13 +893,11 @@ As you'd expect, fitting regression models in R is pretty easy. Whether you're f
 - `lmer()` and `glmer()` for multilevel models and generalised multilevel models (from the `lme4` package)
 - `plm()` and `pglm()` for panel linear and generalised linear regression models (from the `plm` and `pglm` packages)
 
-Regardless of the function the basic code is similar. Let's do a simple linear regression model:
-
 
 ```r
 # Fit a simple linear regression for weight vs height
-m1 <- lm(formula = Height ~ Weight,         # specifies Height as the independent variable
-         data = asthma)                     # sets 'asthma' as the dataset
+m1 <- lm(formula = Height ~ Weight, # Height is the independent variable
+         data = asthma)             # sets 'asthma' as the dataset
 
 # Get a summary of the model
 summary(m1)
@@ -940,9 +934,9 @@ For a slightly more complicated example, let's see if we can predict sex from he
 asthma <- mutate(asthma, Sex = Sex - 1)
 
 # Fit a simple linear regression for weight vs height
-m2 <- glm(formula = Sex ~ Height + Weight,         # specifies Sex as the independent variable
-          data = asthma,                            # sets 'asthma' as the dataset
-          family = binomial)                        # family = binomial for logistic regression               
+m2 <- glm(formula = Sex ~ Height + Weight,  # specifies Sex as the independent variable
+          data = asthma,                    # sets 'asthma' as the dataset
+          family = binomial)                # for logistic regression               
 
 # Get a summary of the model
 summary(m2)
@@ -997,6 +991,12 @@ Basic Plotting: Base R
 # Box plot of weight by Sex
 boxplot(Weight ~ Sex,
         data = asthma)
+
+# Add some titles
+title(main = "Boxplot of weight by sex",
+      sub = "Super informative sub title",
+      x = "Sex",
+      y = "Weight (kg)")
 ```
 
 <img src="intro_to_R.Rmd-figure/unnamed-chunk-33-1.png" title="plot of chunk unnamed-chunk-33" alt="plot of chunk unnamed-chunk-33" width="40%" style="display: block; margin: auto;" />
@@ -1014,8 +1014,9 @@ plot(formula = Height ~ Weight,
 m1 <- lm(formula = Height ~ Weight,
          data = asthma)
 
-# Add a regression line
+# Add a regression line and a title
 abline(m1, col = "red")
+title(main = "A very exciting scatterplot")
 ```
 
 <img src="intro_to_R.Rmd-figure/unnamed-chunk-34-1.png" title="plot of chunk unnamed-chunk-34" alt="plot of chunk unnamed-chunk-34" width="40%" style="display: block; margin: auto;" />
@@ -1025,7 +1026,7 @@ Plotting: ggplot2
 
 The `ggplot2` package is part of the `tidyverse`. It  produces better looking graphs than base R, but these graphs often need more lines of code to build up, and the language takes a little getting used to. The book on ggplot is available free [here](https://ggplot2-book.org/).
 
-The `ggplot()` function requires a set of aesthetic mappings from data to attributes of the plot (position, colour, size)
+The `ggplot()` function requires a set of aesthetic mappings from data to attributes of the plot (position, colour, size). Plot features (like points, lines, boxplots etc.) are added using 'geoms'. Just about every feature of the plot can be customised. Various built-in themes are available as well.
 
 
 ```r
@@ -1052,7 +1053,20 @@ g1
 Plotting: ggplot2
 ========================================================
 
-<img src="intro_to_R.Rmd-figure/unnamed-chunk-36-1.png" title="plot of chunk unnamed-chunk-36" alt="plot of chunk unnamed-chunk-36" width="50%" style="display: block; margin: auto;" />
+<img src="intro_to_R.Rmd-figure/unnamed-chunk-36-1.png" title="plot of chunk unnamed-chunk-36" alt="plot of chunk unnamed-chunk-36" width="70%" style="display: block; margin: auto;" />
+
+Plotting: ggplot2
+========================================================
+
+You can also use facets to produce separate plots for each value of a variable.
+
+
+```r
+# Facet the plot by Sex
+g1 + facet_wrap(vars(Sex))
+```
+
+<img src="intro_to_R.Rmd-figure/unnamed-chunk-37-1.png" title="plot of chunk unnamed-chunk-37" alt="plot of chunk unnamed-chunk-37" width="65%" style="display: block; margin: auto;" />
 
 Plotting: cowplot
 ========================================================
@@ -1101,7 +1115,7 @@ plot_grid(g_title, g_main, g_caption,
 Plotting: cowplot
 ========================================================
 
-<img src="intro_to_R.Rmd-figure/unnamed-chunk-38-1.png" title="plot of chunk unnamed-chunk-38" alt="plot of chunk unnamed-chunk-38" width="50%" style="display: block; margin: auto;" />
+<img src="intro_to_R.Rmd-figure/unnamed-chunk-39-1.png" title="plot of chunk unnamed-chunk-39" alt="plot of chunk unnamed-chunk-39" width="70%" style="display: block; margin: auto;" />
 
 Programming - Loops
 ========================================================
@@ -1161,11 +1175,11 @@ family
 ```
 
 ```
-    name age    sex driver stringsAsfactors middle_name adult
-1 Steven  38   male   TRUE            FALSE         Lee adult
-2  Vicki  39 female   TRUE            FALSE      Louise adult
-3  Oscar   5   male  FALSE            FALSE       Brian child
-4 Imogen   2 female  FALSE            FALSE    Emmeline child
+    name age    sex driver middle_name adult
+1 Steven  38   male   TRUE         Lee adult
+2  Vicki  39 female   TRUE      Louise adult
+3  Oscar   5   male  FALSE       Brian child
+4 Imogen   2 female  FALSE    Emmeline child
 ```
 
 Extras - Git & GitHub
