@@ -119,7 +119,7 @@ Objects can be accessed by typing their name and pressing return in the console.
 *Example*
 
 ```r
-# Create an object called 'name' with value 'Senior'
+# Create an object called 'name' with value 'Brockman'
 name <- "Brockman"
 
 # Access the object
@@ -1142,8 +1142,7 @@ For loops are written like this: `for(i in values){code_to_repeat}`
 # Loop over family, printing a summary for each person.
 for(i in 1:nrow(family)){
    p <- paste(family$name[i],
-              family$middle_name[i],
-              "Senior is a",
+              "Brockman is a",
               family$age[i],
               "year old",
               family$sex[i],
@@ -1153,11 +1152,11 @@ for(i in 1:nrow(family)){
 ```
 
 ```
-[1] "Pete  Senior is a 41 year old male"
-[1] "Sue  Senior is a 40 year old female"
-[1] "Jake  Senior is a 11 year old male"
-[1] "Ben  Senior is a 7 year old male"
-[1] "Karen  Senior is a 5 year old female"
+[1] "Pete Brockman is a 41 year old male"
+[1] "Sue Brockman is a 40 year old female"
+[1] "Jake Brockman is a 11 year old male"
+[1] "Ben Brockman is a 7 year old male"
+[1] "Karen Brockman is a 5 year old female"
 ```
 There are also while loops. These execute code while a given statement is true. Be careful with these: they can run indefinitely. I never use them.
 
@@ -1191,6 +1190,81 @@ family
 3  Jake  11   male  FALSE            student child
 4   Ben   7   male  FALSE            student child
 5 Karen   5 female  FALSE            student child
+```
+
+Extras - Rmarkdown
+========================================================
+
+As well as writing scripts in R, you can also write other documents like word documents, pdfs, presentations in pdf or html formats, as well as blogs and other formats. These slides were written in a version of Rmarkdown.
+
+Rmarkdown is a system for combining normal text and code. This allows you to display the code and outputs, if you're writing for an audience that might want to see the code. 
+
+Or you can hide the code and just include the outputs. This lets you write a report that contains all the analysis code. That way if someone wants to see how the report was produced, they can just look at the Rmarkdown file.
+
+You can create a new Rmarkdown file directly in Rstudio using the same menu that you use to create a new script.
+
+The [definitive guide to rmarkdown](https://bookdown.org/yihui/rmarkdown/) is available as a free online book.
+
+Extras - FingertipsR
+========================================================
+
+For those that spend a lot of time working with data from the public health outcomes framework, PHE has produced a package for you. FingertipsR makes it possible to access data directly from within R. 
+
+FingertipsR has two main functions:
+
+- `indicators()` gets a list of indicators from the database;
+- `fingertips_data()` downloads data for a given indicator ID.
+
+
+```r
+# Load fingertips R (remember to install it first)
+library(fingertipsR)
+
+# Get the list of indicators
+inds <- indicators()
+head(inds, n = 3)
+```
+
+```
+# A tibble: 3 x 6
+  IndicatorID IndicatorName      DomainID DomainName ProfileID ProfileName 
+        <int> <fct>                 <int> <chr>          <int> <chr>       
+1         113 Smoking attribut…    1.94e9 Key Indic…        18 Local Tobac…
+2        1207 Smoking attribut…    1.94e9 Key Indic…        18 Local Tobac…
+3        1210 Smokers that hav…    1.94e9 Key Indic…        18 Local Tobac…
+```
+
+```r
+# Get data for Smoking attributable mortality
+smoke_mort <- fingertips_data(IndicatorID = 113)
+head(smoke_mort, n = 3)
+```
+
+```
+  IndicatorID                  IndicatorName ParentCode ParentName
+1         113 Smoking attributable mortality       <NA>       <NA>
+2         113 Smoking attributable mortality       <NA>       <NA>
+3         113 Smoking attributable mortality       <NA>       <NA>
+   AreaCode AreaName AreaType     Sex     Age CategoryType Category
+1 E92000001  England  England    Male 35+ yrs         <NA>     <NA>
+2 E92000001  England  England  Female 35+ yrs         <NA>     <NA>
+3 E92000001  England  England Persons 35+ yrs         <NA>     <NA>
+  Timeperiod    Value LowerCI95.0limit UpperCI95.0limit LowerCI99.8limit
+1  2007 - 09 313.3118         311.7206         314.9089               NA
+2  2007 - 09 140.5151         139.5403         141.4945               NA
+3  2007 - 09 308.4284         307.2028         309.6577               NA
+  UpperCI99.8limit    Count Denominator Valuenote RecentTrend
+1               NA 154981.7    41363742      <NA>        <NA>
+2               NA  94343.4    45201863      <NA>        <NA>
+3               NA 246089.4    86714427      <NA>        <NA>
+  ComparedtoEnglandvalueorpercentiles ComparedtoRegionvalueorpercentiles
+1                        Not compared                       Not compared
+2                        Not compared                       Not compared
+3                        Not compared                       Not compared
+  TimeperiodSortable Newdata Comparedtogoal
+1           20070000    <NA>           <NA>
+2           20070000    <NA>           <NA>
+3           20070000    <NA>           <NA>
 ```
 
 Extras - Git & GitHub
