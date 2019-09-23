@@ -44,7 +44,7 @@ Lessons from personal experience
 - Have a project (preferably lots).
 - Learn to read the documentation.
 - Learn to find help: 
-   - Stack Overflow etc.
+   - [Stack Overflow](https://stackoverflow.com/), [Stack Exchange](https://stats.stackexchange.com/) etc.
    - Google (Googling the error message is totally legit programming skills)
 - There are loads of free online resources. I made a [list] (https://medium.com/@steven.senior/free-r-resources-500182a54e90).
 
@@ -76,7 +76,7 @@ You can do a lot just in the terminal. It's a good place to do quick exploratory
 
 But one of the advantages of using a programming language is that you have a record of everything you have done to the data. Other people can re-use and check this. 
 
-A **script** is just a list of commands. They're usually written in a text file with the file extension '.R`.
+A **script** is just a list of commands. They're usually written in a text file with the file extension '.R'.
 
 You can run individual lines from a script, chunks of it, or the whole thing. Select the code you want to run and press Ctrl + Enter. Commands are executed sequentially from top to bottom. 
 
@@ -90,6 +90,7 @@ R ignores white space. You can use this to make your code readable. Use as much 
 - Stick to lower case!
 - Avoid spaces and special characters in object and variable names.
 
+I will probably break all of these rules in this set of slides.
 Types of things in R
 ========================================================
 R recognises a limited number of basic types of values:
@@ -99,7 +100,7 @@ R recognises a limited number of basic types of values:
 - Logical (`TRUE` or `FALSE`)
 - Factors
 - NA (usually for missing data)
-- NaN (not-a-number - usually where an error has happened)
+- NaN (not-a-number - usually where an error has happened, like when you've tried to calculate `0/0`)
 
 Objects
 ========================================================
@@ -107,7 +108,9 @@ R stores everything (single values, data, regression models, graphs) in things c
 
 An object is just a name (or key) plus some value.
 
-Objects are created using the **assignment operator**: either `<-` or `=`
+Objects are created using the **assignment operator**: either `<-` or `=` (or if you want to be extra funky `->`). The name goes on left, the value on the right, like this
+
+- `object_name <- object_value`.
 
 Most R style guides (yes, there are such things!) recommend using <- because = is easily confused with `==`, which is R for 'are these two things the same'. The keyboard shortcut is 'Alt -'.
 
@@ -117,14 +120,14 @@ Objects can be accessed by typing their name and pressing return in the console.
 
 ```r
 # Create an object called 'name' with value 'Senior'
-name <- "Senior"
+name <- "Brockman"
 
 # Access the object
 name
 ```
 
 ```
-[1] "Senior"
+[1] "Brockman"
 ```
 
 Functions
@@ -140,7 +143,7 @@ You call a function by typing its name and giving it the required inputs between
 ```r
 # create a function that returns the cube of a number minus the number squared
 my_function <- function(x){
-  x^3 - x^2
+  x^3 - x^2                  
 }
 
 # Test the function out
@@ -160,7 +163,7 @@ Sys.Date()
 ```
 
 ```
-[1] "2019-09-22"
+[1] "2019-09-23"
 ```
 
 You can get help on a function by typing `?function_name` (note no brackets!). This will include a list of all the arguments (including any defaults), an explanation of what it produces, and (ideally) some examples of how to use it.
@@ -185,29 +188,31 @@ install.packages("readxl")
 library(readxl)
 ```
 
+Note that when you use `install.packages()` the name of the package goes in quotation marks. When you load the package with `library()` or `require()` you don't use quotation marks.
+
 Vectors
 ========================================================
 R stores data in objects called **vectors**. A vector is just a collection of data **of the same type**.
 
-A vector's length is the number of items in it. You can get a vector's length using the `length()` function. You can access individual items from a vector using square brackets: `vector_name[item_number]`
+A vector's length is the number of items in it. You can get a vector's length using the `length()` function. You can access individual items from a vector using square brackets: `vector_name[item_number]`.
 
 Single data items are stored as vectors too - they're vectors with a length of 1.
 
-Vectors are created using the `c()` function, or with dedicated functions for the type of data: `character()`, `numeric()`, `logical()`, and `factor()`
+Vectors are created using the `c()` function, or with dedicated functions for the type of data: `character()`, `numeric()`, `logical()`, and `factor()`.
 
-You can find out the type of vector using the `class()` function
+You can find out the type of vector using the `class()` function.
 
 
 ```r
 # Create a numeric vector
-ages <- c(38, 39, 5, 2)
+ages <- c(48, 50, 11, 7, 5)
 
 # Get the vector's length
 length(ages)
 ```
 
 ```
-[1] 4
+[1] 5
 ```
 
 ```r
@@ -225,7 +230,7 @@ ages[3]
 ```
 
 ```
-[1] 5
+[1] 11
 ```
 
 Lists
@@ -250,10 +255,10 @@ my_list
 
 ```
 [[1]]
-[1] "Senior"
+[1] "Brockman"
 
 [[2]]
-[1] 38 39  5  2
+[1] 48 50 11  7  5
 ```
 
 You can access specific bits of the list like this:
@@ -265,7 +270,7 @@ my_list[[2]]
 ```
 
 ```
-[1] 38 39  5  2
+[1] 48 50 11  7  5
 ```
 
 Data Frames
@@ -280,11 +285,11 @@ You can combine vectors into a data frame using the `data.frame()` function on t
 
 ```r
 # Make some data
-name <- c("Steven", "Vicki", "Oscar", "Imogen")
-age <- c(38, 39, 5, 2)
-sex <- c("male", "female", "male", "female")
-can_drive <- c(TRUE, TRUE, FALSE, FALSE)
-fav_drink <- c("beer", "g&t", "juice", "milk")
+name <- c("Pete", "Sue", "Jake", "Ben", "Karen")
+age <- c(41, 40, 11, 7, 5)
+sex <- c("male", "female", "male", "male", "female")
+can_drive <- c(TRUE, TRUE, FALSE, FALSE, FALSE)
+fav_drink <- c("beer", "wine", "juice", "coke", "milk")
 
 # Make a data frame
 family <- data.frame(name, age, sex, can_drive, fav_drink,
@@ -295,11 +300,12 @@ family
 ```
 
 ```
-    name age    sex can_drive fav_drink
-1 Steven  38   male      TRUE      beer
-2  Vicki  39 female      TRUE       g&t
-3  Oscar   5   male     FALSE     juice
-4 Imogen   2 female     FALSE      milk
+   name age    sex can_drive fav_drink
+1  Pete  41   male      TRUE      beer
+2   Sue  40 female      TRUE      wine
+3  Jake  11   male     FALSE     juice
+4   Ben   7   male     FALSE      coke
+5 Karen   5 female     FALSE      milk
 ```
 
 Data Frames
@@ -315,9 +321,9 @@ head(family, n = 2)
 ```
 
 ```
-    name age    sex can_drive fav_drink
-1 Steven  38   male      TRUE      beer
-2  Vicki  39 female      TRUE       g&t
+  name age    sex can_drive fav_drink
+1 Pete  41   male      TRUE      beer
+2  Sue  40 female      TRUE      wine
 ```
 
 ```r
@@ -326,8 +332,8 @@ tail(family, n = 1)
 ```
 
 ```
-    name age    sex can_drive fav_drink
-4 Imogen   2 female     FALSE      milk
+   name age    sex can_drive fav_drink
+5 Karen   5 female     FALSE      milk
 ```
  - In RStudio you can get a sort of spreadsheet like view using the `View()` function (note the capital 'V'!)
  
@@ -342,7 +348,7 @@ summary(family$age)
 
 ```
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-   2.00    4.25   21.50   21.00   38.25   39.00 
+    5.0     7.0    11.0    20.8    40.0    41.0 
 ```
 
 ```r
@@ -352,7 +358,7 @@ summary(family$name)
 
 ```
    Length     Class      Mode 
-        4 character character 
+        5 character character 
 ```
 
 ```r
@@ -362,7 +368,7 @@ summary(as.factor(family$sex))
 
 ```
 female   male 
-     2      2 
+     2      3 
 ```
 
 ```r
@@ -372,7 +378,7 @@ summary(family$can_drive)
 
 ```
    Mode   FALSE    TRUE 
-logical       2       2 
+logical       3       2 
 ```
 
 Summary Functions
@@ -385,15 +391,15 @@ summary(family)
 ```
 
 ```
-     name                age            sex            can_drive      
- Length:4           Min.   : 2.00   Length:4           Mode :logical  
- Class :character   1st Qu.: 4.25   Class :character   FALSE:2        
- Mode  :character   Median :21.50   Mode  :character   TRUE :2        
-                    Mean   :21.00                                     
-                    3rd Qu.:38.25                                     
-                    Max.   :39.00                                     
+     name                age           sex            can_drive      
+ Length:5           Min.   : 5.0   Length:5           Mode :logical  
+ Class :character   1st Qu.: 7.0   Class :character   FALSE:3        
+ Mode  :character   Median :11.0   Mode  :character   TRUE :2        
+                    Mean   :20.8                                     
+                    3rd Qu.:40.0                                     
+                    Max.   :41.0                                     
   fav_drink        
- Length:4          
+ Length:5          
  Class :character  
  Mode  :character  
                    
@@ -409,12 +415,12 @@ str(family)
 ```
 
 ```
-'data.frame':	4 obs. of  5 variables:
- $ name     : chr  "Steven" "Vicki" "Oscar" "Imogen"
- $ age      : num  38 39 5 2
- $ sex      : chr  "male" "female" "male" "female"
- $ can_drive: logi  TRUE TRUE FALSE FALSE
- $ fav_drink: chr  "beer" "g&t" "juice" "milk"
+'data.frame':	5 obs. of  5 variables:
+ $ name     : chr  "Pete" "Sue" "Jake" "Ben" ...
+ $ age      : num  41 40 11 7 5
+ $ sex      : chr  "male" "female" "male" "male" ...
+ $ can_drive: logi  TRUE TRUE FALSE FALSE FALSE
+ $ fav_drink: chr  "beer" "wine" "juice" "coke" ...
 ```
 
 Data Frames
@@ -430,8 +436,8 @@ family[1,]
 ```
 
 ```
-    name age  sex can_drive fav_drink
-1 Steven  38 male      TRUE      beer
+  name age  sex can_drive fav_drink
+1 Pete  41 male      TRUE      beer
 ```
 
 ```r
@@ -440,7 +446,7 @@ family[,3]
 ```
 
 ```
-[1] "male"   "female" "male"   "female"
+[1] "male"   "female" "male"   "male"   "female"
 ```
 
 ```r
@@ -449,7 +455,7 @@ family[3, 2]
 ```
 
 ```
-[1] 5
+[1] 11
 ```
 - Or you can get individual variables using the `$` operator: `data_frame_name$variable_name`:
 
@@ -460,7 +466,7 @@ family$can_drive
 ```
 
 ```
-[1]  TRUE  TRUE FALSE FALSE
+[1]  TRUE  TRUE FALSE FALSE FALSE
 ```
 
 Data Frames
@@ -486,7 +492,7 @@ nrow(family)
 ```
 
 ```
-[1] 4
+[1] 5
 ```
 
 ```r
@@ -539,7 +545,7 @@ log(family$age)
 ```
 
 ```
-[1] 3.6375862 3.6635616 1.6094379 0.6931472
+[1] 3.713572 3.688879 2.397895 1.945910 1.609438
 ```
 
 ```r
@@ -548,16 +554,17 @@ tolower(family$name)
 ```
 
 ```
-[1] "steven" "vicki"  "oscar"  "imogen"
+[1] "pete"  "sue"   "jake"  "ben"   "karen"
 ```
 
 ```r
 # Combine names with a surname
-paste(family$name, "Senior", sep = " ")
+paste(family$name, "Brockman", sep = " ")
 ```
 
 ```
-[1] "Steven Senior" "Vicki Senior"  "Oscar Senior"  "Imogen Senior"
+[1] "Pete Brockman"  "Sue Brockman"   "Jake Brockman"  "Ben Brockman"  
+[5] "Karen Brockman"
 ```
 
 ```r
@@ -566,7 +573,7 @@ family$age + 10
 ```
 
 ```
-[1] 48 49 15 12
+[1] 51 50 21 17 15
 ```
 
 Basic Operations: Logical Operations
@@ -589,7 +596,7 @@ family$age >= 21
 ```
 
 ```
-[1]  TRUE  TRUE FALSE FALSE
+[1]  TRUE  TRUE FALSE FALSE FALSE
 ```
 
 ```r
@@ -598,7 +605,7 @@ family$name[family$age >= 21]
 ```
 
 ```
-[1] "Steven" "Vicki" 
+[1] "Pete" "Sue" 
 ```
 
 ```r
@@ -718,7 +725,7 @@ names(family)[4] <- "driver"
 
 ```r
 # Add a new variable
-family$middle_name <- c("Lee", "Louise", "Brian", "Emmeline")
+family$job <- c("history teacher", "personal assistant", "student", "student", "student")
 ```
 - You can drop columns or rows using the square brackets operator with a `-` sign:
 
@@ -731,18 +738,20 @@ family
 ```
 
 ```
-    name age    sex driver middle_name
-1 Steven  38   male   TRUE         Lee
-2  Vicki  39 female   TRUE      Louise
-3  Oscar   5   male  FALSE       Brian
-4 Imogen   2 female  FALSE    Emmeline
+   name age    sex driver                job
+1  Pete  41   male   TRUE    history teacher
+2   Sue  40 female   TRUE personal assistant
+3  Jake  11   male  FALSE            student
+4   Ben   7   male  FALSE            student
+5 Karen   5 female  FALSE            student
 ```
 
 Manipulating Data: Tidyverse
 ========================================================
 Base R is fine, particularly for quick manipulations. But it can quickly get dense and confusing when you need to do repeated manipations on the same data frame.
 
-The `tidyverse` is an enormous package of packages that contains functions built around the principles of tidy data. The functions in `tidyverse` are named and designed to make code easier to read.
+The `tidyverse` is an enormous package of packages that contains functions built around the principles of tidy data. The functions in `tidyverse` are named and designed to make code easier to read. A good (free) book that uses tidyverse is [R for Data Science](https://r4ds.had.co.nz/).
+
 One package within `tidyverse` is called `dplyr`. This package makes manipulating and summarising data in R *much* easier.
 
 In particular, it introduces the `%>%` (pipe operator). This lets you pass the outputs from one function straight to another. This means you can omit the first argument (which is normally the data frame that you want to operate on).
@@ -1144,10 +1153,11 @@ for(i in 1:nrow(family)){
 ```
 
 ```
-[1] "Steven Lee Senior is a 38 year old male"
-[1] "Vicki Louise Senior is a 39 year old female"
-[1] "Oscar Brian Senior is a 5 year old male"
-[1] "Imogen Emmeline Senior is a 2 year old female"
+[1] "Pete  Senior is a 41 year old male"
+[1] "Sue  Senior is a 40 year old female"
+[1] "Jake  Senior is a 11 year old male"
+[1] "Ben  Senior is a 7 year old male"
+[1] "Karen  Senior is a 5 year old female"
 ```
 There are also while loops. These execute code while a given statement is true. Be careful with these: they can run indefinitely. I never use them.
 
@@ -1175,11 +1185,12 @@ family
 ```
 
 ```
-    name age    sex driver middle_name adult
-1 Steven  38   male   TRUE         Lee adult
-2  Vicki  39 female   TRUE      Louise adult
-3  Oscar   5   male  FALSE       Brian child
-4 Imogen   2 female  FALSE    Emmeline child
+   name age    sex driver                job adult
+1  Pete  41   male   TRUE    history teacher adult
+2   Sue  40 female   TRUE personal assistant adult
+3  Jake  11   male  FALSE            student child
+4   Ben   7   male  FALSE            student child
+5 Karen   5 female  FALSE            student child
 ```
 
 Extras - Git & GitHub
