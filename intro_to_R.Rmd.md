@@ -206,7 +206,7 @@ Sys.Date()
 ```
 
 ```
-[1] "2019-09-23"
+[1] "2019-10-15"
 ```
 
 You can get help on a function by typing `?function_name` (note no brackets!). This will include a list of all the arguments (including any defaults), an explanation of what it produces, and (ideally) some examples of how to use it.
@@ -242,85 +242,1154 @@ ls()
 To start with you'll be operating in the **global environment**. There are other environments that exist and can be created but don't worry about those now. But it's worth knowing that objects created within a function are defined in a different environment. So you can't access the `result` object that we created earlier from the global environment:
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+```r
+# See whether R can find the object 'result' in the global environment
+exists("result")
+```
 
 ```
-Error in eval(expr, envir, enclos) : object 'result' not found
+[1] FALSE
 ```
+
+Packages
+=========================================================
+
+R has loads of built in functions. But part of the joy of R is that there is a wonderful community that have written code that you can re-use. These are bundled together in things called **packages**. 
+
+A package is just a collection of functions and data, plus the documentation that goes with them.
+
+You need to install the package the first time you use it. You do this with `install.packages()`.
+
+You need to load the package into each new R session. You do this with `library()` or `require()` functions.
+
+
+```r
+# Install the readxl package - you only need to do this once!
+install.packages("readxl")
+
+# Load the readxl package - you need to do this each R session!
+library(readxl)
+```
+
+Note that when you use `install.packages()` the name of the package goes in quotation marks. When you load the package with `library()` or `require()` you don't use quotation marks.
+
+Vectors
+========================================================
+R stores data in objects called **vectors**. A vector is just a collection of data **of the same type**.
+
+A vector's length is the number of items in it. You can get a vector's length using the `length()` function. You can access individual items from a vector using square brackets: `vector_name[item_number]`.
+
+Single data items are stored as vectors too - they're vectors with a length of 1.
+
+Vectors are created using the `c()` function, or with dedicated functions for the type of data: `character()`, `numeric()`, `logical()`, and `factor()`.
+
+You can find out the type of vector using the `class()` function.
+
+
+```r
+# Create a numeric vector
+ages <- c(48, 50, 11, 7, 5)
+
+# Get the vector's length
+length(ages)
+```
+
+```
+[1] 5
+```
+
+```r
+# Get the vector's class
+class(ages)
+```
+
+```
+[1] "numeric"
+```
+
+```r
+# Get the third item
+ages[3]
+```
+
+```
+[1] 11
+```
+
+Lists
+========================================================
+
+Where vectors always have to contain the same type of data, a **list** can combine just about any set of objects.
+
+Lists are used a lot to store complicated objects, like output from a regression model.
+
+You probably won't use them much to start with but they're worth knowing about.
+
+You can create a list with the `list()` function.
+
+
+```r
+# Re-create the 'name' object
+name <- "Brockman"
+
+# Make a list
+my_list <- list(name, ages)
+
+# Access the list
+my_list
+```
+
+```
+[[1]]
+[1] "Brockman"
+
+[[2]]
+[1] 48 50 11  7  5
+```
+
+You can access specific bits of the list like this:
+
+
+```r
+# Or using square brackets
+my_list[[2]]
+```
+
+```
+[1] 48 50 11  7  5
+```
+
+Data Frames
+========================================================
+
+**Data frames** are the most common format for data in R. You can think of them a bit like a spreadsheet.
+
+A data frame is essentially a special type of list of vectors that **all have the same length**, but can contain different types of data. You can think of the individual vectors forming the columns of the spreadsheet. For epidemiological studies, the rows might represent individuals, and the columns represent the different types of data.
+
+You can combine vectors into a data frame using the `data.frame()` function on the vectors.
+
+
+```r
+# Make some data
+name <- c("Pete", "Sue", "Jake", "Ben", "Karen")
+age <- c(41, 40, 11, 7, 5)
+sex <- c("male", "female", "male", "male", "female")
+can_drive <- c(TRUE, TRUE, FALSE, FALSE, FALSE)
+fav_drink <- c("beer", "wine", "juice", "coke", "milk")
+
+# Make a data frame
+family <- data.frame(name, age, sex, can_drive, fav_drink,
+                     stringsAsFactors = FALSE)
+
+# View the data frame
+family
+```
+
+```
+   name age    sex can_drive fav_drink
+1  Pete  41   male      TRUE      beer
+2   Sue  40 female      TRUE      wine
+3  Jake  11   male     FALSE     juice
+4   Ben   7   male     FALSE      coke
+5 Karen   5 female     FALSE      milk
+```
+
+Data Frames
+========================================================
+
+There are lots of ways to view your data frames.
+ - You can just call up the whole thing like we just did.
+ - You can view the top or bottom few lines with the `head()` and `tail()` functions:
+
+```r
+# View the top two lines
+head(family, n = 2)
+```
+
+```
+  name age    sex can_drive fav_drink
+1 Pete  41   male      TRUE      beer
+2  Sue  40 female      TRUE      wine
+```
+
+```r
+# View the bottom line
+tail(family, n = 1)
+```
+
+```
+   name age    sex can_drive fav_drink
+5 Karen   5 female     FALSE      milk
+```
+ - In RStudio you can get a sort of spreadsheet like view using the `View()` function (note the capital 'V'!)
+ 
+Summary Functions
+========================================================
+The `summary()` function is very, very useful. It produces different outputs depending on the type of variable:
+
+```r
+# Summaries of numeric variables
+summary(family$age)
+```
+
+```
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    5.0     7.0    11.0    20.8    40.0    41.0 
+```
+
+```r
+# Summaries of character variables
+summary(family$name)
+```
+
+```
+   Length     Class      Mode 
+        5 character character 
+```
+
+```r
+# Summaries of factor variables
+summary(as.factor(family$sex))
+```
+
+```
+female   male 
+     2      3 
+```
+
+```r
+# Summaries of logical variables
+summary(family$can_drive)
+```
+
+```
+   Mode   FALSE    TRUE 
+logical       3       2 
+```
+
+Summary Functions
+========================================================
+You can call `summary()` directly on the data frame.
+
+```r
+# Summarise all the things!
+summary(family)
+```
+
+```
+     name                age           sex            can_drive      
+ Length:5           Min.   : 5.0   Length:5           Mode :logical  
+ Class :character   1st Qu.: 7.0   Class :character   FALSE:3        
+ Mode  :character   Median :11.0   Mode  :character   TRUE :2        
+                    Mean   :20.8                                     
+                    3rd Qu.:40.0                                     
+                    Max.   :41.0                                     
+  fav_drink        
+ Length:5          
+ Class :character  
+ Mode  :character  
+                   
+                   
+                   
+```
+
+The `str()` function is also a useful way to preview the data:
+
+```r
+# Get a summary of the data frame
+str(family)
+```
+
+```
+'data.frame':	5 obs. of  5 variables:
+ $ name     : chr  "Pete" "Sue" "Jake" "Ben" ...
+ $ age      : num  41 40 11 7 5
+ $ sex      : chr  "male" "female" "male" "male" ...
+ $ can_drive: logi  TRUE TRUE FALSE FALSE FALSE
+ $ fav_drink: chr  "beer" "wine" "juice" "coke" ...
+```
+
+Data Frames
+========================================================
+There are lots of ways to access specific bits of your data frames.
+
+- You can use the index notation: `data_frame_name[row_number , column_number]`:
+
+
+```r
+# Get the first row
+family[1,]
+```
+
+```
+  name age  sex can_drive fav_drink
+1 Pete  41 male      TRUE      beer
+```
+
+```r
+# Get the third column
+family[,3]
+```
+
+```
+[1] "male"   "female" "male"   "male"   "female"
+```
+
+```r
+# Get the second data item in the third row
+family[3, 2]
+```
+
+```
+[1] 11
+```
+- Or you can get individual variables using the `$` operator: `data_frame_name$variable_name`:
+
+
+```r
+# Get the 'can_drive' variable
+family$can_drive
+```
+
+```
+[1]  TRUE  TRUE FALSE FALSE FALSE
+```
+
+Data Frames
+========================================================
+You can find out the names of the variables (i.e. columns) using the `names()` function:
+
+
+```r
+# Get the variable names
+names(family)
+```
+
+```
+[1] "name"      "age"       "sex"       "can_drive" "fav_drink"
+```
+
+You can find out the numbers of rows and columns using `nrow()` and `ncol()`:
+
+
+```r
+# Get the number of rows
+nrow(family)
+```
+
+```
+[1] 5
+```
+
+```r
+# Get the number of columns
+ncol(family)
+```
+
+```
+[1] 5
+```
+
+Tidy Data - A Digression
+========================================================
+
+Lots of time and effort goes into getting data into a form that you can actually use. 
+Errors in data handling can really cock up a data analysis.
+But most stats education doesn't cover how to manage data.
+As we put more emphasis on reproducible analyses, principles of data handling are getting more attention.
+Tidy data is just a set of simple principles to help guide data handling. These are:
+
+- Each variable forms a column.
+- Each observation forms a row.
+- Each type of observational unit forms a table.
+
+Following these principles makes manipulating the data a lot easier. 
+
+Real data is often not tidy. Common problems include:
+
+- Column headers are values, not variable names.
+- Multiple variables are stored in one column.
+- Variables are stored in both rows and columns.
+- Multiple types of observational units are stored in the same table.
+- A single observational unit is stored in multiple tables.
+
+A fuller (but readable) overview is [here](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html).
+
+Basic Operations
+========================================================
+R can manipulate all of this data.
+
+- Maths: all the usual stuff
+- Strings: changing case, replacing letters, searching for matching strings, combining strings etc.
+- Logical: asking whether two things are the same or not the same.
+
+*Examples*
+
+```r
+# Get the log of age
+log(family$age)
+```
+
+```
+[1] 3.713572 3.688879 2.397895 1.945910 1.609438
+```
+
+```r
+# Convert names to lower case
+tolower(family$name)
+```
+
+```
+[1] "pete"  "sue"   "jake"  "ben"   "karen"
+```
+
+```r
+# Combine names with a surname
+paste(family$name, "Brockman", sep = " ")
+```
+
+```
+[1] "Pete Brockman"  "Sue Brockman"   "Jake Brockman"  "Ben Brockman"  
+[5] "Karen Brockman"
+```
+
+```r
+# Find out how old the Brockmans will be in 10 years
+family$age + 10
+```
+
+```
+[1] 51 50 21 17 15
+```
+
+Basic Operations: Logical Operations
+========================================================
+
+You will probably find at some point that you want to compare two things in R. You can do this with **logical operators**. These are:
+- `==` : equal to e.g. `x == y` asks 'is x equal to y'.
+- `!=` : not equal to.
+- `>`, `<`, `>=`, `<=` : greater than, less than, greater or equal to, less or equal to.
+- `!` : not
+
+Logical values are stored as `0` for false and `1` for true, so they can be added up.
+They can also be used as an index for vectors or data frames.
+
+*Examples*
+
+```r
+# Find family members who are 21 or over
+family$age >= 21
+```
+
+```
+[1]  TRUE  TRUE FALSE FALSE FALSE
+```
+
+```r
+# Get names of family members who are 21 or over
+family$name[family$age >= 21]
+```
+
+```
+[1] "Pete" "Sue" 
+```
+
+```r
+# How many family members can drive?
+sum(family$can_drive)
+```
+
+```
+[1] 2
+```
+
+Loading Data - CSV Files
+========================================================
+Data comes in lots of weird and wonderful formats. There's usually a way to get them into R.
+
+The easiest are comma-separated variable (.csv) files. You can read these in with `read.csv()`.
+
+`read.csv` has a couple of annoying features: 
+- Chief among them is its desire to convert every character variable to a factor. Thwart it by setting `stringsAsFactors = FALSE`. 
+- You also want to tell it that the first row will be the variable names using `header = TRUE`.
+
+
+```r
+# Read the asthma csv file and store it as an object called 'asthma'
+asthma <- read.csv(file = "asthma.csv",
+                   stringsAsFactors = FALSE,
+                   header = TRUE)
+
+# View the top five rows
+head(asthma,
+     n = 5)
+```
+
+```
+  X ID Age Sex Height Weight     Dadm    Ddisc
+1 1  1   7   1    109   13.1 09/12/95 15/12/95
+2 2  2   8   2    124   14.1 04/11/96 15/11/96
+3 3  3   8   2    125   16.2 11/11/95 20/11/95
+4 4  4   9   1    130   17.5 17/07/96 18/07/96
+5 5  5  11   2    139   30.7 21/03/96 30/03/96
+```
+
+The `asthma.csv` file has a column (`X`) which are the row numbers. We don't need this, but we can get rid of it (more on this later...)
+
+There are other basic formats (like tab-delimited data). These can be read in using `read.table()` (of which `read.csv()` is just a special case). You can specify what R looks for to separate the variables using the `sep` argument.
+
+Loading Data - Excel Files
+========================================================
+
+Excel files are common, but can be a total pain in the arse (especially when people insist on using blank rows and putting random comments all over the place). 
+
+R doesn't have a built in function for reading excel, but there are several packages that do. We already installed and loaded one (`readxl`). 
+
+- Unless your data is on the first sheet, you need to tell it which sheet to open.
+- You can skip the top n rows using the `skip` argument.
+
+
+```r
+# Read in the 'imd_la.xlsx' fileand store as an object called 'imd'
+imd <- read_excel(path = "imd_la.xlsx",
+                  sheet = 2,
+                  skip = 0)
+
+# View the top 4 rows
+head(imd,
+     n = 4)
+```
+
+```
+# A tibble: 4 x 12
+  `Upper Tier Loc… `Upper Tier Loc… `IMD - Average … `IMD - Rank of …
+  <chr>            <chr>                       <dbl>            <dbl>
+1 E06000001        Hartlepool                 21887.               28
+2 E06000002        Middlesbrough              23563.               16
+3 E06000003        Redcar and Clev…           19716.               55
+4 E06000004        Stockton-on-Tees           17047.               84
+# … with 8 more variables: `IMD - Average score` <dbl>, `IMD - Rank of
+#   average score` <dbl>, `IMD - Proportion of LSOAs in most deprived 10%
+#   nationally` <dbl>, `IMD - Rank of proportion of LSOAs in most deprived
+#   10% nationally` <dbl>, `IMD - Extent` <dbl>, `IMD - Rank of
+#   extent` <dbl>, `IMD - Local concentration` <dbl>, `IMD - Rank of local
+#   concentration` <dbl>
+```
+
+Other Formats
+========================================================
+
+People still insist on using other stats packages. They will learn. But in the meantime, we're going to have to be able to read in other data formats. 
+
+There are packages for this. A good one is the `foreign` package. This contains functions for reading a range of files including SPSS files. If you need to read Stata .dat files, the imaginatively titled `read.stata` and `read.stata13` packages are the ones you need.
+
+As ever, Google is your friend.
+
+Saving Data
+========================================================
+
+You may want to save your data (for example if you've spent ages pulling different variables together and manipulating them, and your code takes ages to run). You can save in most formats, but I recommend using csv for simplicity. You can save data using the `write.csv()` function.
+
+
+```r
+# Save the asthma object to a new csv file called 'asthma_new.csv`
+write.csv(x = asthma,                # the object you want to save
+          file = "asthma_new")       # the file name you want to five it
+```
+
+Manipulating Data: Base R
+========================================================
+
+You will probably want to select, delete, and transform data. There are lots of ways to do this. 
+- You can rename your variables simply by assigning a new value to the names attribute of the data frame using `names()`:
+
+```r
+# Rename a variable
+names(family)[4] <- "driver"
+```
+- You can add a new variable by assigning the vector directly to a new variable using the `$` operator
+
+```r
+# Add a new variable
+family$job <- c("history teacher", "personal assistant", "student", "student", "student")
+```
+- You can drop columns or rows using the square brackets operator with a `-` sign:
+
+```r
+# Drop the 'fav_drink' variable
+family <- family[,-5]
+
+# See what we've created
+family
+```
+
+```
+   name age    sex driver                job
+1  Pete  41   male   TRUE    history teacher
+2   Sue  40 female   TRUE personal assistant
+3  Jake  11   male  FALSE            student
+4   Ben   7   male  FALSE            student
+5 Karen   5 female  FALSE            student
+```
+
+Manipulating Data: Tidyverse
+========================================================
+Base R is fine, particularly for quick manipulations. But it can quickly get dense and confusing when you need to do repeated manipations on the same data frame.
+
+The `tidyverse` is an enormous package of packages that contains functions built around the principles of tidy data. The functions in `tidyverse` are named and designed to make code easier to read. A good (free) book that uses tidyverse is [R for Data Science](https://r4ds.had.co.nz/).
+
+One package within `tidyverse` is called `dplyr`. This package makes manipulating and summarising data in R *much* easier.
+
+In particular, it introduces the `%>%` (pipe operator). This lets you pass the outputs from one function straight to another. This means you can omit the first argument (which is normally the data frame that you want to operate on).
+
+
+```r
+# load the tidyverse
+library(tidyverse)
+
+# manipulate the asthma data and store over the old object
+asthma <- asthma %>%
+          select(-X) %>% # Drop that pesky extra variable
+          mutate(Dadm = as.Date(Dadm, format = "%d/%m/%y"), # Convert variables to dates
+                 Ddisc = as.Date(Ddisc, format = "%d/%m/%y"),
+                 los = Ddisc - Dadm) # Calculate a length of stay 
+
+# Summarise by sex
+asthma %>% 
+  group_by(Sex) %>%                                
+  summarise(mean_height = mean(Height),            
+            mean_weight = mean(Weight),
+            mean_age = mean(Age),
+            mean_los = mean(los))
+```
+
+```
+# A tibble: 2 x 5
+    Sex mean_height mean_weight mean_age mean_los     
+  <int>       <dbl>       <dbl>    <dbl> <drtn>       
+1     1        140.        25.1     11.2 4.750000 days
+2     2        144.        31.3     11.8 7.166667 days
+```
+
+Manipulating Data: Re-coding Variables
+========================================================
+Recoding variables is easy in R. 
+
+
+```r
+# Convert height from cm into m using base R
+asthma$Height <- asthma$Height / 100
+
+# Calculate a BMI variable using the tidyverse mutate() function
+asthma <- mutate(asthma, 
+                 bmi = Weight / Height^2)
+
+# Calculate an 'overweight' variable using logical operators using mutate() and %>%
+asthma <- asthma %>% 
+          mutate(overweight = bmi >= 25)
+
+# View what we have created!
+head(asthma, n = 5)
+```
+
+```
+  ID Age Sex Height Weight       Dadm      Ddisc     los       bmi
+1  1   7   1   1.09   13.1 1995-12-09 1995-12-15  6 days 11.026008
+2  2   8   2   1.24   14.1 1996-11-04 1996-11-15 11 days  9.170135
+3  3   8   2   1.25   16.2 1995-11-11 1995-11-20  9 days 10.368000
+4  4   9   1   1.30   17.5 1996-07-17 1996-07-18  1 days 10.355030
+5  5  11   2   1.39   30.7 1996-03-21 1996-03-30  9 days 15.889447
+  overweight
+1      FALSE
+2      FALSE
+3      FALSE
+4      FALSE
+5      FALSE
+```
+
+Manipulating Data: Merging Data Sets
+========================================================
+You may find that the data that you want is spread across several data sets. You can merge them together using one or more columns using the `merge()` function. Tidyverse also has a set of functions that do the same thing but I don't find that they add much. 
+
+The code below illustrates how the merge function works
+
+
+```eval
+# Merge data set data_a and data_b together using columns col_x and col_y
+# Assume for argument that we only we're only really interested in records from data_a
+merged_data <- merge(x = data_a, # The first data set to merge
+                     y = data_b, # The second data set to merge
+                     by = c("col_x". "col_y"), # Note that merge needs a character vector
+                     all.x = TRUE, # Keeps all the data_a records regardless if they match
+                     all.y = FALSE) # Only keeps records from data_b that are matched
+
+```
+
+
+Basic Stats
+========================================================
+R is a stats language. So you'd expect that it has plenty of built-in functions for calculating routine stats: These include `mean()`, `sd()`, `median()`, `range()`, `IQR()`, `mode()`. We've used a couple of these already.
+
+Helpfully, the `summary()` function produces lots of these in one go:
+
+
+```r
+# Summarise the ages in the 'Age' variable
+summary(asthma$Age)
+```
+
+```
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   7.00    8.25   11.50   11.60   14.50   17.00 
+```
+
+Similarly there are built in functions for common statistical tests. These include `t.test()`, `wilcox.test()`,  `chisq.test()`, and `cor.test()`.
+
+```r
+# Compare length of stay by sex
+t.test(formula = los ~ Sex,
+       data = asthma)
+```
+
+```
+
+	Welch Two Sample t-test
+
+data:  los by Sex
+t = -0.97132 days, df = 5.6929, p-value = 0.3708 days
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -8.585158 days  3.751824 days
+sample estimates:
+Time differences in days
+mean in group 1 mean in group 2 
+       4.750000        7.166667 
+```
+
+Basic Stats - More Examples
+========================================================
+There are two functions for correlation - `cor()` just gives you the coefficent. `cor.test()` gives you the full hypothesis test.
+
+```r
+# Get the correlation coefficient
+cor(x = asthma$Height, y = asthma$Weight)
+```
+
+```
+[1] 0.9070978
+```
+
+```r
+# Correlate height and weight
+cor.test(x = asthma$Height, y = asthma$Weight)
+```
+
+```
+
+	Pearson's product-moment correlation
+
+data:  asthma$Height and asthma$Weight
+t = 6.0954, df = 8, p-value = 0.000291
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ 0.6469869 0.9780995
+sample estimates:
+      cor 
+0.9070978 
+```
+
+More Stats: Regression Models
+========================================================
+As you'd expect, fitting regression models in R is pretty easy. Whether you're fitting a simple linear model or some complicated generalised multilevel model, the functions use a similar set of arguments, which are also common with some plotting functions. The main functions I've used are:
+
+- `lm()` for linear models;
+- `glm()` for generalised linear models (logistic regression, poisson regression etc.)
+- `lmer()` and `glmer()` for multilevel models and generalised multilevel models (from the `lme4` package)
+- `plm()` and `pglm()` for panel linear and generalised linear regression models (from the `plm` and `pglm` packages)
+
+
+```r
+# Fit a simple linear regression for weight vs height
+m1 <- lm(formula = Height ~ Weight, # Height is the independent variable
+         data = asthma)             # sets 'asthma' as the dataset
+
+# Get a summary of the model
+summary(m1)
+```
+
+```
+
+Call:
+lm(formula = Height ~ Weight, data = asthma)
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.139532 -0.044041  0.006777  0.071156  0.107251 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  1.03595    0.06931  14.947 3.96e-07 ***
+Weight       0.01335    0.00219   6.095 0.000291 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.09017 on 8 degrees of freedom
+Multiple R-squared:  0.8228,	Adjusted R-squared:  0.8007 
+F-statistic: 37.15 on 1 and 8 DF,  p-value: 0.000291
+```
+
+More Stats: Regression Models
+========================================================
+For a slightly more complicated example, let's see if we can predict sex from height and weight using a logistic regression.
+
+
+```r
+# Recode Sex as 0 or 1 from 1 and 2
+asthma <- mutate(asthma, Sex = Sex - 1)
+
+# Fit a simple linear regression for weight vs height
+m2 <- glm(formula = Sex ~ Height + Weight,  # specifies Sex as the independent variable
+          data = asthma,                    # sets 'asthma' as the dataset
+          family = binomial)                # for logistic regression               
+
+# Get a summary of the model
+summary(m2)
+```
+
+```
+
+Call:
+glm(formula = Sex ~ Height + Weight, family = binomial, data = asthma)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-1.5539  -1.0304   0.5208   1.0283   1.3332  
+
+Coefficients:
+            Estimate Std. Error z value Pr(>|z|)
+(Intercept)   8.6320    10.4950   0.822    0.411
+Height       -9.2383    10.4279  -0.886    0.376
+Weight        0.1748     0.1732   1.009    0.313
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 13.460  on 9  degrees of freedom
+Residual deviance: 11.959  on 7  degrees of freedom
+AIC: 17.959
+
+Number of Fisher Scoring iterations: 4
+```
+
+Basic Plotting: Base R
+========================================================
+
+One of the reasons that people like R is that it can produce high quality graphics. It's used by a lot of data visualisation people and data journalists for this reason.
+
+R has built in plotting functions. These are fine for quick exploratory plots. They often require fewer lines of code, and can be built up interactively.
+
+The basic functions are `plot()` and `hist()` and `boxplot()`.
+
+
+```r
+# Get a histogram of lengths of stay
+hist(as.numeric(asthma$los))
+```
+
+<img src="intro_to_R.Rmd-figure/unnamed-chunk-36-1.png" title="plot of chunk unnamed-chunk-36" alt="plot of chunk unnamed-chunk-36" width="40%" height="30%" style="display: block; margin: auto;" />
+
+Basic Plotting: Base R
+========================================================
+
+
+```r
+# Box plot of weight by Sex
+boxplot(Weight ~ Sex,
+        data = asthma)
+
+# Add some titles
+title(main = "Boxplot of weight by sex",
+      sub = "Super informative sub title",
+      x = "Sex",
+      y = "Weight (kg)")
+```
+
+<img src="intro_to_R.Rmd-figure/unnamed-chunk-37-1.png" title="plot of chunk unnamed-chunk-37" alt="plot of chunk unnamed-chunk-37" width="40%" style="display: block; margin: auto;" />
+
+Basic Plotting: Base R
+========================================================
+
+
+```r
+# Get plot height against weight
+plot(formula = Height ~ Weight,
+     data = asthma)
+
+# Fit a regression model
+m1 <- lm(formula = Height ~ Weight,
+         data = asthma)
+
+# Add a regression line and a title
+abline(m1, col = "red")
+title(main = "A very exciting scatterplot")
+```
+
+<img src="intro_to_R.Rmd-figure/unnamed-chunk-38-1.png" title="plot of chunk unnamed-chunk-38" alt="plot of chunk unnamed-chunk-38" width="40%" style="display: block; margin: auto;" />
+
+Plotting: ggplot2
+========================================================
+
+The `ggplot2` package is part of the `tidyverse`. It  produces better looking graphs than base R, but these graphs often need more lines of code to build up, and the language takes a little getting used to. The book on ggplot is available free [here](https://ggplot2-book.org/).
+
+The `ggplot()` function requires a set of aesthetic mappings from data to attributes of the plot (position, colour, size). Plot features (like points, lines, boxplots etc.) are added using 'geoms'. Just about every feature of the plot can be customised. Various built-in themes are available as well.
+
+
+```r
+# Scatter plot using ggplot
+g1 <- ggplot(aes(x = Height,
+                 y = Weight,
+                 colour = Sex,
+                 size = as.numeric(los)),
+             data = asthma) +
+      geom_point() +
+      geom_smooth(method = "lm") +
+      scale_fill_viridis_d() +
+      theme_bw() +
+      theme(plot.title = element_text(face = "bold")) +
+      labs(title = "Scatterplot of asthma data",
+           subtitle = "Plot subtitle",
+           caption = "Plot caption",
+           x = "Height (cm)",
+           y = "Weight (kg)")
+
+g1
+```
+
+Plotting: ggplot2
+========================================================
+
+<img src="intro_to_R.Rmd-figure/unnamed-chunk-40-1.png" title="plot of chunk unnamed-chunk-40" alt="plot of chunk unnamed-chunk-40" width="70%" style="display: block; margin: auto;" />
+
+Plotting: ggplot2
+========================================================
+
+You can also use facets to produce separate plots for each value of a variable.
+
+
+```r
+# Facet the plot by Sex
+g1 + facet_wrap(vars(Sex))
+```
+
+<img src="intro_to_R.Rmd-figure/unnamed-chunk-41-1.png" title="plot of chunk unnamed-chunk-41" alt="plot of chunk unnamed-chunk-41" width="65%" style="display: block; margin: auto;" />
+
+Plotting: cowplot
+========================================================
+
+As a quick extra, I thought I'd mention `cowplot` which is a nice package by Claus O. Wilke. I particularly like it for producing figures for publication where I need to combine several figures. Claus's book is [here](https://serialmentor.com/dataviz/).
+
+
+```r
+# Load cowplot
+library(cowplot)
+
+# Change the theme on plot g1
+g1 <- g1 + theme_cowplot()
+
+# Make a second plot
+g2 <- ggplot(aes(x = Age, y = los, colour = Sex),
+             data = asthma) +
+      geom_point() +
+      geom_smooth(method = "lm") +
+      theme_cowplot() + 
+      labs(title = "Scatterplot of asthma data",
+           subtitle = "Plot subtitle",
+           caption = "Plot caption",
+           x = "Age (years)",
+           y = "Length of stay (days)")
+
+g_main <- plot_grid(g1, g2, ncol = 2)
+
+# Make a title and caption
+g_title <- ggplot() + 
+           labs(title = "Some random plots",
+                subtitle = "Random subtitle") + 
+           theme_cowplot()
+
+g_caption <- ggplot() +
+             labs(caption = "A really interesting caption") +
+             theme(plot.caption = element_text(hjust = 0)) +
+             theme_cowplot()
+
+# Plot all the things!
+plot_grid(g_title, g_main, g_caption,
+          ncol = 1,
+          rel_heights = c(0.15, 1, 0.1))
+```
+
+Plotting: cowplot
+========================================================
+
+<img src="intro_to_R.Rmd-figure/unnamed-chunk-43-1.png" title="plot of chunk unnamed-chunk-43" alt="plot of chunk unnamed-chunk-43" width="70%" style="display: block; margin: auto;" />
+
+Programming - Loops
+========================================================
+
+When you need to do the same thing over a number of items, a for-loop can be the way to go.
+
+- An example might be reading in several similar files within a file structure.
+
+For loops take a set of code and repeat it for each value of a set of things you want to iterate over.
+
+For loops are written like this: `for(i in values){code_to_repeat}`
+
+
+```r
+# Loop over family, printing a summary for each person.
+for(i in 1:nrow(family)){
+   p <- paste(family$name[i],
+              "Brockman is a",
+              family$age[i],
+              "year old",
+              family$sex[i],
+              sep = " ")
+   print(p)
+}
+```
+
+```
+[1] "Pete Brockman is a 41 year old male"
+[1] "Sue Brockman is a 40 year old female"
+[1] "Jake Brockman is a 11 year old male"
+[1] "Ben Brockman is a 7 year old male"
+[1] "Karen Brockman is a 5 year old female"
+```
+There are also while loops. These execute code while a given statement is true. Be careful with these: they can run indefinitely. I never use them.
+
+Programming - if and else
+========================================================
+Sometimes when you're processing data you want to vary your code depending on whether something is true or not. 
+
+if statements look like this: `if(condition){code_to_execute_if_true}`
+
+if statements can also be followed by an `else` statement and some code to execute if the if statement is false.
+
+
+```r
+# Use a for loop and an if-else statement to download a file if it isn't already downloaded
+for(i in 1:nrow(family)){
+   if(family$age[i] >= 18){
+     family$adult[i] <- "adult"
+   }else{
+      family$adult[i] <- "child"
+   }
+}
+
+# See what we made!
+family
+```
+
+```
+   name age    sex driver                job adult
+1  Pete  41   male   TRUE    history teacher adult
+2   Sue  40 female   TRUE personal assistant adult
+3  Jake  11   male  FALSE            student child
+4   Ben   7   male  FALSE            student child
+5 Karen   5 female  FALSE            student child
+```
+
+Extras - Rmarkdown
+========================================================
+
+As well as writing scripts in R, you can also write other documents like word documents, pdfs, presentations in pdf or html formats, as well as blogs and other formats. These slides were written in a version of Rmarkdown.
+
+Rmarkdown is a system for combining normal text and code. This allows you to display the code and outputs, if you're writing for an audience that might want to see the code. 
+
+Or you can hide the code and just include the outputs. This lets you write a report that contains all the analysis code. That way if someone wants to see how the report was produced, they can just look at the Rmarkdown file.
+
+You can create a new Rmarkdown file directly in Rstudio using the same menu that you use to create a new script.
+
+The [definitive guide to rmarkdown](https://bookdown.org/yihui/rmarkdown/) is available as a free online book.
+
+Extras - FingertipsR
+========================================================
+
+For those that spend a lot of time working with data from the public health outcomes framework, PHE has produced a package for you. FingertipsR makes it possible to access data directly from within R. 
+
+FingertipsR has two main functions:
+
+- `indicators()` gets a list of indicators from the database;
+- `fingertips_data()` downloads data for a given indicator ID.
+
+
+```r
+# Load fingertips R (remember to install it first)
+library(fingertipsR)
+
+# Get the list of indicators
+inds <- indicators()
+head(inds, n = 3)
+```
+
+```
+# A tibble: 3 x 6
+  IndicatorID IndicatorName      DomainID DomainName ProfileID ProfileName 
+        <int> <fct>                 <int> <chr>          <int> <chr>       
+1         113 Smoking attribut…    1.94e9 Key Indic…        18 Local Tobac…
+2        1207 Smoking attribut…    1.94e9 Key Indic…        18 Local Tobac…
+3        1210 Smokers that hav…    1.94e9 Key Indic…        18 Local Tobac…
+```
+
+```r
+# Get data for Smoking attributable mortality
+smoke_mort <- fingertips_data(IndicatorID = 113)
+head(smoke_mort, n = 3)
+```
+
+```
+  IndicatorID                  IndicatorName ParentCode ParentName
+1         113 Smoking attributable mortality       <NA>       <NA>
+2         113 Smoking attributable mortality       <NA>       <NA>
+3         113 Smoking attributable mortality       <NA>       <NA>
+   AreaCode AreaName AreaType     Sex     Age CategoryType Category
+1 E92000001  England  England    Male 35+ yrs         <NA>     <NA>
+2 E92000001  England  England  Female 35+ yrs         <NA>     <NA>
+3 E92000001  England  England Persons 35+ yrs         <NA>     <NA>
+  Timeperiod    Value LowerCI95.0limit UpperCI95.0limit LowerCI99.8limit
+1  2007 - 09 313.3118         311.7206         314.9089               NA
+2  2007 - 09 140.5151         139.5403         141.4945               NA
+3  2007 - 09 308.4284         307.2028         309.6577               NA
+  UpperCI99.8limit    Count Denominator Valuenote RecentTrend
+1               NA 154981.7    41363742      <NA>        <NA>
+2               NA  94343.4    45201863      <NA>        <NA>
+3               NA 246089.4    86714427      <NA>        <NA>
+  ComparedtoEnglandvalueorpercentiles ComparedtoRegionvalueorpercentiles
+1                        Not compared                       Not compared
+2                        Not compared                       Not compared
+3                        Not compared                       Not compared
+  TimeperiodSortable Newdata Comparedtogoal
+1           20070000    <NA>           <NA>
+2           20070000    <NA>           <NA>
+3           20070000    <NA>           <NA>
+```
+
+Extras - Git & GitHub
+========================================================
+
+**Git** 
+- Git is a version control system that is used a lot by people who work with code.
+- Version control is important even when you're working on your own. It's very easy to break a long script!
+- Get lets you work on a different version (or branch) of your code and files and only merge it back to the master version once you're happy that it works.
+- An introduction is [here](https://git-scm.com/book/en/v1/Getting-Started-Git-Basics).
+
+**GitHub**
+- GitHub is a website that you can use to host your Git repositories. 
+- It lets you use Git through a graphical interface, which saves learning git's language separately.
+- It also serves as a bit of a social network and showcase for work.
+- RStudio integrates well with GitHub. You can:
+   - Start R projects directly from GitHub repositories;
+   - Push changes directly to GitHub from RStudio; and
+   - Copy (or 'fork') other people's repositories if you want to re-use their code; and
+   - Send them pull requests if you think you've improved or fixed their code.
+
+The End
+========================================================
